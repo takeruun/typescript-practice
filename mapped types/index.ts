@@ -91,3 +91,31 @@ function readonlyify<T>(obj: T): DeepReadonly<T> {
   return obj as DeepReadonly<T>;
 }
 // conditional type で解決
+
+
+
+// mapped type union distribution //
+/**
+ * {[P in keyof T]: X}
+ * T に union が入る
+ */
+
+type Arrayify<T> = {[P in keyof T]: Array<T[P]>};
+
+type FooU = { foo: string };
+type BarU = { bar: number };
+
+type FooBarU = FooU | BarU;
+
+// FooBarArr は union型 が分配されて Arrayify<FooU> | Arrayify<BarU> になる
+type FooBarArr = Arrayify<FooBarU>;
+
+const val1u: FooBarArr = { foo: ['f', 'o', 'o'] };
+const val2u: FooBarArr = { bar: [0, 1, 2, 3, 4] };
+// ↓これは Arraify<Foo> でも Arraify<Bar> でもないのでエラー
+const val3u: FooBarArr = {};
+
+/**
+ * mapped typeが分配される
+ */
+
