@@ -119,3 +119,22 @@ const val3u: FooBarArr = {};
  * mapped typeが分配される
  */
 
+
+/**
+ * 補足
+ * 
+ * keyof FooBarU は "foo" & "bar" という型になり。
+ *   これは "foo" でありかつ "bar" であるという意味であり、
+ *   そんな値は存在しないのでneverになってほしいとこだが..ならない
+ * 
+ *  FooU と BarU に共通する名前のプロパティは存在しないため、
+ *    FooBarU に存在するプロパティはない
+ *    よって keyof FooBarU に当てはまるような P が無いため FooBarArr2 は {}
+ * 
+ * mapped type による union の分配は、
+ *   in の右側が keyof T（しかもTは型変数）で T に union型 が入るという条件を満たすときにのみ発生
+ */
+// FooBarArrは{}になる
+type FooBarArr2 = {[P in keyof FooBarU]: Array<FooBarU[P]>};
+// ↓これがエラーにならない！
+const val1: FooBarArr = {};
