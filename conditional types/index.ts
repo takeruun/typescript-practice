@@ -150,3 +150,20 @@ const val3ar: ValueOfOptionArr<Option<number>> = undefined;
 const val4ar: ValueOfOptionArr<Option<number>> = 123;
 
 // この例では、条件部分に来ている V[] はただの型変数ではないので union distribution の発生条件に当てはまらず、分配が発生しない
+
+
+
+// never型 と union distribution //
+
+type IsNever<T> = T extends never ? true : false;
+
+// TIN は never になる
+type TIN = IsNever<never>;
+/**
+ * never が0個の union のように振る舞う
+ * 
+ * T が型変数で T extends never ? X : Y という形の条件型に対して 
+ *   T に neverを代入すると常に結果は never になる
+ */
+
+
