@@ -138,3 +138,40 @@ const val3u: FooBarArr = {};
 type FooBarArr2 = {[P in keyof FooBarU]: Array<FooBarU[P]>};
 // ↓これがエラーにならない！
 const val1: FooBarArr = {};
+
+
+
+
+// mapped type と array //
+type NumArr = number[];
+
+type StrArr = { [P in keyof NumArr]: string };
+
+// StrArr型の変数aを宣言
+declare const a: StrArr;
+
+const _: string = a[0];
+
+/**
+ * mapped type により全てのプロパティが文字列にマップされたため、
+ *   本来関数型のはずの、配列が持つプロパティforEach の型も string にされてしまう
+ */
+a.forEach(val => {
+  console.log(val);
+});
+
+/**
+ * 解決策
+ * 
+ * [P in keyof T] で型変数 T の型が配列だった場合に、
+ *   全てのプロパティをマップするのではなく要素の型のみをマップしてくれる
+ */
+// すべてのプロパティをstringにする型関数
+type Strify<T> = {[P in keyof T]: string};
+
+type NumArr2 = number[];
+// StrArrはstring[]型になる
+type StrArr2 = Strify<NumArr2>;
+
+const arr2: StrArr2 = ['foo', 'bar'];
+arr2.forEach(val => console.log(val));
